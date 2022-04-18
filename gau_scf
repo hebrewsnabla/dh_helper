@@ -1,0 +1,4 @@
+import geninp
+import sys
+xc = sys.argv[1]
+geninp.gau_scf(xc)

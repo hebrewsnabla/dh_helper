@@ -42,9 +42,9 @@ def dump_fnal(params):
         corr_fnal = p2g[corr_fnal]
     fnal_g = exch_fnal + corr_fnal
     exch_scal = 1 - hf_exch
-    scal = ' iop(3/76=10000%s, 3/77=%s%s, 3/78=%s%s) '% (tostr(hf_exch),
+    scal = '# iop(3/76=10000%s, 3/77=%s%s, 3/78=%s%s) '% (tostr(hf_exch),
            tostr(exch_scal), tostr(exch_scal), tostr(corr_scal), tostr(corr_scal))
-    return fnal_g + scal
+    return fnal_g, scal
 
 def parse_xc_d3(xc):
     params = dhutil.XC_DH_ADD_MAP[xc]["D3"]
@@ -65,12 +65,36 @@ def dump_d3(params):
 
 def gau_scf(xc):
     params = parse_xc_s(xc.lower())
-    route = dump_fnal(params)
-    print('#p ' + route)
+    templ, scal = dump_fnal(params)
+    print('#p ' + templ)
+    print('# ' + scal)
     if 'd3' in xc.lower():
         d3_params = parse_xc_d3(xc.lower())
         print('# ' + dump_d3(d3_params))
 
+def parse_xc_pt(xc):
+    c_pt, os, ss = dhutil.XC_DH_MAP[xc][2:]
+    return c_pt, os, ss
 
+def dump_pt(params):
+    c_pt, os, ss = params
+    os *= c_pt
+    ss *= c_pt
+    os = tostr(os)
+    ss = tostr(ss)
+    dump = 'iop(3/125=%s%s)' %(ss,os)
+    return dump
+
+def gau_dh(xc):
+    params = parse_xc_s(xc.lower())
+    templ, scal = dump_fnal(params)
+    params_pt = parse_xc_pt(xc.lower())
+    pt_scal = dump_pt(params_pt)
+    print('#p ' + templ)
+    print('# ' + scal)
+    print('# ' + pt_scal)
+    if 'd3' in xc.lower():
+        d3_params = parse_xc_d3(xc.lower())
+        print('# ' + dump_d3(d3_params))
 
     

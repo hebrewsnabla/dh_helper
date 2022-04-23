@@ -42,7 +42,7 @@ def dump_fnal(params):
         corr_fnal = p2g[corr_fnal]
     fnal_g = exch_fnal + corr_fnal
     exch_scal = 1 - hf_exch
-    scal = '# iop(3/76=10000%s, 3/77=%s%s, 3/78=%s%s) '% (tostr(hf_exch),
+    scal = 'iop(3/76=10000%s, 3/77=%s%s, 3/78=%s%s) '% (tostr(hf_exch),
            tostr(exch_scal), tostr(exch_scal), tostr(corr_scal), tostr(corr_scal))
     return fnal_g, scal
 
@@ -60,7 +60,7 @@ def dump_d3(params):
         else:
             params_dump.append(tostr(item, 7))
     s6, a1, s8, a2, sr6 = params_dump
-    dump = 'iop(3/174=%s,3/175=%s,3/176=0,3/177=%s,3/178=%s)' % (s6, s8, a1, a2)
+    dump = 'em=gd3bj iop(3/174=%s,3/175=%s,3/176=0,3/177=%s,3/178=%s)' % (s6, s8, a1, a2)
     return dump
 
 def gau_scf(xc):
@@ -85,11 +85,38 @@ def dump_pt(params):
     dump = 'iop(3/125=%s%s)' %(ss,os)
     return dump
 
+DH_Templ = {
+    'BLYP':'B2PLYP',
+    'PBEP86':'DSDPBEP86'
+        }
+
+CODEc = {
+    'P86':4,
+    'PBE':9,
+    'LYP':2,
+        }
+CODEx = {
+    'B':400,
+    'PBE':1000,
+    }
+
+def xccode(params):
+    x,c = params
+    xcode = CODEx[x]
+    ccode = CODEc[c]
+    code = xcode + ccode
+    return code
+
 def gau_dh(xc):
     params = parse_xc_s(xc.lower())
     templ, scal = dump_fnal(params)
     params_pt = parse_xc_pt(xc.lower())
     pt_scal = dump_pt(params_pt)
+    if templ in DH_Templ:
+        templ = DH_Templ[templ]
+    else:
+        templ = 'B2PLYP'
+        templ += ' iop(3/74=%d)'%xccode(params[:2])
     print('#p ' + templ)
     print('# ' + scal)
     print('# ' + pt_scal)

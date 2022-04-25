@@ -25,7 +25,8 @@ def parse_xc_s(xc):
     return exch_fnal, corr_fnal, hf_exch, corr_scal
 
 p2g = {
-    'B88':'B'
+    'B88':'B',
+    'mPW91':'mPW',
 }
 
 def tostr(floatnum, len=5):
@@ -87,27 +88,40 @@ def dump_pt(params):
 
 DH_Templ = {
     'BLYP':'B2PLYP',
-    'PBEP86':'DSDPBEP86'
+    'PBEP86':'DSDPBEP86',
+    'PBEPBE':'PBEQIDH'
         }
 
 CODEc = {
+    'LYP':2,
     'P86':4,
     'PBE':9,
-    'LYP':2,
+    'B95':11,
         }
 CODEx = {
     'B':400,
+    'PW91':600,
+    'mPW':900,
     'PBE':1000,
     }
 
 def xccode(params):
     x,c = params
+    if x in p2g: x = p2g[x]
+    if c in p2g: c = p2g[c]
     xcode = CODEx[x]
     ccode = CODEc[c]
     code = xcode + ccode
     return code
 
+SUPPORTED = ['b2plyp', 'b2plypd3', 'mpw2plyp',
+            'dsdpbep86',
+            'pbe0dh', 'pbeqidh']
+
 def gau_dh(xc):
+    if xc.lower() in SUPPORTED:
+        print('This functional has already been supported by Gaussian.')
+        return
     params = parse_xc_s(xc.lower())
     templ, scal = dump_fnal(params)
     params_pt = parse_xc_pt(xc.lower())

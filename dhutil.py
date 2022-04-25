@@ -29,7 +29,9 @@ XC_DH_MAP = {   # [xc_s, xc_n, cc, c_os, c_ss]
     "dsdblypd3": ("0.71*HF + 0.29*B88, 0.54*LYP", None, 1, 0.47, 0.40),
     "dsdpbeb95d3": ("0.66*HF + 0.34*PBE, 0.55*B95", None, 1, 0.46, 0.09),
     "b2plypd3": ("0.53*HF + 0.47*B88, 0.73*LYP", None, 0.27, 1, 1),
-}
+    # bDH RSH
+    #"wb2gpplyp":("0.65*SR_HF(0.27) + 1.0*LR_HF(0.27) + 0.35*B88, 0.64*LYP", None, 0.36, 1, 1),
+    }
 # Additional parameters for doubly hybrids (mostly dftd3)
 XC_DH_ADD_MAP = {           # [s6 a1 s8 a2 sr6], version
     "dsdpbep86d3": {"D3": ([0.48, 0, 0, 5.6, 0], 4)},

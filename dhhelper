@@ -1,0 +1,31 @@
+def argument_parse():
+    global parser, args
+    parser=argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter,
+                               description='Generate Gaussian iops for doubly hybrid functionals')
+    parser.add_argument("-t","--type",dest='type',metavar='type',type=str,default='',
+                        required=True, choices=['dh','scf'],
+                        help='scf: for SCF only (useful for stable=opt)\n'
+                             ' dh: for full functional (include SCF and PT2)')
+    parser.add_argument("-f","--fun",dest='xc',metavar='functional',type=str,
+                        #default='',
+                        required=True,
+                        help = 'supported: B2PLYP    MPW2PLYP    PBE0DH      PBEQIDH\n'
+                               '         PBE02     B2GPPLYP    LS1DHPBE    DSDPBEP86\n'
+                               '         DSDPBEP86D3    revDSDPBEP86D3     DSDPBEPBED3\n'
+                               '         DSDBLYPD3      DSDPBEB95D3        B2PLYPD3\n'
+			       ' Attention: No hyphens in functional name\n')
+    parser.add_argument("--version",action="version",version='v1.0')
+    args=parser.parse_args()
+    
+    
+import argparse
+from geninp import gau_scf, gau_dh
+argument_parse()
+if args.type == 'scf':
+    gau_scf(args.xc)
+elif args.type == 'dh':
+    gau_dh(args.xc)
+#else:
+#    print('->> Please use -t parameter choose a type first! <<-\n'
+#           '      scf: for SCF only (useful for stable=opt)\n'
+#           '       dh: for full functional (include SCF and PT2)')

@@ -22,7 +22,8 @@ import argparse
 from geninp import gau_scf, gau_dh
 try:
     argument_parse()
-except:
+except Exception as e:
+    #print(e)
     parser.print_help()
     exit()
 if args.type == 'scf':

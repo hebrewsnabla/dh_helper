@@ -13,14 +13,18 @@ def argument_parse():
                                '         PBE02     B2GPPLYP    LS1DHPBE    DSDPBEP86\n'
                                '         DSDPBEP86D3    revDSDPBEP86D3     DSDPBEPBED3\n'
                                '         DSDBLYPD3      DSDPBEB95D3        B2PLYPD3\n'
-			       ' Attention: No hyphens in functional name\n')
-    parser.add_argument("--version",action="version",version='v1.0')
+			       'Attention: No hyphens in functional name\n')
+    parser.add_argument("-v", "--version",action="version",version='v1.0.220427')
     args=parser.parse_args()
     
     
 import argparse
 from geninp import gau_scf, gau_dh
-argument_parse()
+try:
+    argument_parse()
+except:
+    parser.print_help()
+    exit()
 if args.type == 'scf':
     gau_scf(args.xc)
 elif args.type == 'dh':
